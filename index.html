@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Атомная физика</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            /* Устанавливаем фоновое изображение космоса */
+            background: url('797f6c526a283000468c5620f0c5027b.jpg') no-repeat center center fixed;
+            background-size: cover;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        header {
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            letter-spacing: 1px;
+            text-shadow: 0 0 8px rgba(255,255,255,0.3);
+            animation: floatTitle 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatTitle {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-10px); }
+        }
+
+        main {
+            padding: 40px 20px;
+            text-align: center;
+            max-width: 900px;
+            animation: fadeIn 2s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            0% {opacity:0; transform: translateY(20px);}
+            100% {opacity:1; transform: translateY(0);}
+        }
+
+        main h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px rgba(255,255,255,0.2);
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px rgba(255,255,255,0.2); }
+            100% { text-shadow: 0 0 15px rgba(255,255,255,0.5); }
+        }
+
+        main p {
+            line-height: 1.7;
+            margin-bottom: 20px;
+            text-shadow: 0 0 3px rgba(0,0,0,0.5);
+        }
+
+        .atom-container {
+            position: relative;
+            margin: 60px auto 50px auto;
+            width: 220px;
+            height: 220px;
+            animation: atomFloat 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes atomFloat {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
+        }
+
+        .atom-center {
+            width: 20px;
+            height: 20px;
+            background: #e74c3c;
+            border-radius: 50%;
+            position: absolute;
+            top: calc(50% - 10px);
+            left: calc(50% - 10px);
+            box-shadow: 0 0 10px #e74c3c;
+        }
+
+        .electron-orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 160px;
+            height: 160px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: rotateOrbit 8s linear infinite;
+        }
+
+        .electron {
+            width: 12px;
+            height: 12px;
+            background: #3498db;
+            border-radius: 50%;
+            position: absolute;
+            top: calc(50% - 6px);
+            left: calc(50% - 80px - 6px);
+            box-shadow: 0 0 8px #3498db;
+        }
+
+        .electron-orbit.second-orbit {
+            width: 110px;
+            height: 110px;
+            animation-duration: 5s;
+        }
+
+        .electron.second-electron {
+            top: calc(50% - 6px);
+            left: calc(50% - 55px - 6px);
+            background: #9b59b6;
+            box-shadow: 0 0 8px #9b59b6;
+        }
+
+        @keyframes rotateOrbit {
+            0% {transform: translate(-50%, -50%) rotate(0deg);}
+            100% {transform: translate(-50%, -50%) rotate(360deg);}
+        }
+
+        .btn-info {
+            background: #3498db;
+            color: #fff;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 0 10px rgba(52,152,219,0.7);
+            margin-top: 30px;
+        }
+
+        .btn-info:hover {
+            background: #2980b9;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(41,128,185,0.9);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: #1c1f25;
+            padding: 30px 40px;
+            border-radius: 10px;
+            max-width: 700px;
+            width: 100%;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            animation: fadeModal 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeModal {
+            to { opacity: 1; }
+        }
+
+        .modal h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px rgba(255,255,255,0.2);
+        }
+
+        .modal p {
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: #e74c3c;
+        }
+
+        .info-section {
+            margin-top: 60px;
+            text-align: left;
+            text-shadow: 0 0 3px rgba(0,0,0,0.5);
+        }
+
+        .info-section h3 {
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .info-section p {
+            margin-bottom: 20px;
+        }
+
+        .info-section ul {
+            margin-bottom: 20px;
+        }
+
+        .fact-card {
+            background: #2a2f36;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            margin-top: 40px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .fact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 15px rgba(0,0,0,0.7);
+        }
+
+        .fact-card h4 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #f1c40f;
+        }
+
+        .fact-card p {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            .modal {
+                padding: 20px;
+            }
+        }
+        <img src="Formules Scientifiques Dessinées à La Main Sur Le Tableau Noir _ Vecteur Gratuite.jpg" height="417"
+             width="626"/><img
+            src="Formules Scientifiques Dessinées à La Main Sur Le Tableau Noir _ Vecteur Gratuite.jpg" height="417"
+            width="626"/><img
+            src="Formules Scientifiques Dessinées à La Main Sur Le Tableau Noir _ Vecteur Gratuite.jpg" height="417"
+            width="626"/></style>
+</head>
+<body>
+
+<header>
+    <h1>Атомная физика</h1>
+</header>
+
+<main>
+    <h2>Путешествие в глубь материи</h2>
+    <p>
+        Атомная физика — это область науки, которая открывает нам тайны микромира.
+        Понимая строение атомов, их взаимодействие и энергетическую структуру, мы получаем ключ к пониманию природы самой материи.
+    </p>
+
+    <p>
+        От первых моделей атома до современных квантовых теорий —
+        путь познания был долгим и извилистым. Сегодня мы пользуемся результатами этих открытий,
+        создавая новые технологии, расширяя границы знания и применяя их в промышленности, медицине и быту.
+    </p>
+
+    <div class="atom-container">
+        <div class="atom-center"></div>
+        <div class="electron-orbit">
+            <div class="electron"></div>
+        </div>
+        <div class="electron-orbit second-orbit">
+            <div class="electron second-electron"></div>
+        </div>
+    </div>
+
+    <button class="btn-info" id="openModalBtn">Подробнее</button>
+
+    <div class="info-section">
+        <h3>Исторический контекст</h3>
+        <p>
+            В конце XIX и начале XX века учёные шаг за шагом осознавали, что атомы не являются элементарными «кирпичиками» материи.
+            Эксперименты Томсона, Резерфорда и Бора раздвинули горизонты понимания, дав начало квантовой эпохе.
+            Эти идеи легли в основу квантовой механики и заложили фундамент для будущих открытий.
+        </p>
+
+        <h3>Современные приложения</h3>
+        <p>
+            Знания по атомной физике нашли отражение во множестве технологий.
+            Атомные часы дают нам эталон времени, лазеры применяются в науке и индустрии,
+            квантовые компьютеры обещают невиданные вычислительные мощности.
+            В медицине радиационные методы диагностики и лечения во многом обязаны пониманию структуры атомов и их ядер.
+        </p>
+
+        <h3>Интересные факты</h3>
+        <ul>
+            <li>Внутри атома почти всё пространство пусто — ядро и электроны занимают лишь ничтожно малую часть объёма.</li>
+            <li>Изотопы одного и того же элемента отличаются числом нейтронов, что влияет на их физические свойства.</li>
+            <li>Квантовые переходы электронов между орбиталями атома — причина свечения неоновых ламп, ярких спектральных линий и цвета далёких звёзд.</li>
+        </ul>
+
+        <div class="fact-card">
+            <h4>Факт дня</h4>
+            <p>
+                Если увеличить ядро атома водорода до размера теннисного мяча, то электрон оказался бы в километрах от него!
+                Это наглядно демонстрирует «пустоту» атома.
+            </p>
+        </div>
+    </div>
+
+</main>
+
+<div class="overlay" id="overlay">
+    <div class="modal">
+        <button class="close-modal" id="closeModalBtn">&times;</button>
+        <h2>Дополнительная информация</h2>
+        <p>
+            В современную эпоху атомная физика выходит за рамки классических представлений.
+            Мы изучаем холодные атомы, создаём ловушки для отдельных частиц, используем лазерный отбор и манипулирование квантовыми состояниями.
+            Контроль над состояниями атомов позволяет исследовать новые фазовые переходы,
+            создавать квантовые симуляторы и проверять фундаментальные законы физики с невероятной точностью.
+        </p>
+        <p>
+            Атомные конденсаты Бозе–Эйнштейна открывают нам путь к пониманию квантовых явлений на макроскопическом уровне.
+            Изучение атомов — это не просто углубление в прошлое, но и дорога в будущее,
+            где квантовые технологии станут основой новых революционных открытий.
+        </p>
+    </div>
+</div>
+
+<script>
+    const openBtn = document.getElementById('openModalBtn');
+    const closeBtn = document.getElementById('closeModalBtn');
+    const overlay = document.getElementById('overlay');
+
+    openBtn.addEventListener('click', () => {
+        overlay.classList.add('active');
+    });
+
+    closeBtn.addEventListener('click', () => {
+        overlay.classList.remove('active');
+    });
+
+    overlay.addEventListener('click', (e) => {
+        if(e.target === overlay) {
+            overlay.classList.remove('active');
+        }
+    });
+</script>
+</body>
+</html>
